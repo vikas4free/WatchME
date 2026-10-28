@@ -1,0 +1,20 @@
+import type { MediaItem, MediaDetails, MediaKind } from '../../types/media';
+const BASE = import.meta.env.VITE_TMDB_API_BASE_URL || 'https://api.themoviedb.org/3';
+const KEY = import.meta.env.VITE_TMDB_API_KEY;
+export const configured = Boolean(KEY);
+export async function tmdb<T>(path: string, params: Record<string,string> = {}): Promise<T> {
+  if (!KEY) throw new Error('Add VITE_TMDB_API_KEY to your .env file to load live TMDB catalogue data.');
+  const url = new URL(`${BASE.replace(/\\/$/,'')}/${path.replace(/^\\//,'')}`);
+  url.searchParams.set('api_key', KEY);
+  Object.entries(params).forEach(([k,v])=>url.searchParams.set(k,v));
+  const response = await fetch(url.toString());
+  if (!response.ok) throw new Error(response.status === 401 ? 'TMDB rejected the API key. Check your .env configuration.' : `TMDB request failed (${response.status}). Please try again.`);
+  return response.json() as Promise<T>;
+}
+export async function trending() { return (await tmdb<{results:MediaItem[]}>('trending/all/week')).results.filter(x=>x.media_type!=='person'); }
+export async function popularMovies() { return (await tmdb<{results:MediaItem[]}>('movie/popular')).results.map(x=>({...x,media_type:'movie' as const})); }
+export async function popularTV() { return (await tmdb<{results:MediaItem[]}>('tv/popular')).results.map(x=>({...x,media_type:'tv' as const})); }
+export async function topRated() { return (await tmdb<{results:MediaItem[]}>('movie/top_rated')).results.map(x=>({...x,media_type:'movie' as const})); }
+export async function searchMedia(query:string) { return (await tmdb<{results:MediaItem[]}>('search/multi',{query,include_adult:'false'})).results.filter(x=>x.media_type==='movie'||x.media_type==='tv'); }
+export async function mediaDetails(id:number,kind:MediaKind) { return tmdb<MediaDetails>(`${kind}/${id}`,{append_to_response:'credits,videos,similar,recommendations'}); }
+export async function genres(kind:MediaKind) { return (await tmdb<{genres:{id:number;name:string}[]}>(`genre/${kind}/list`)).genres; }
