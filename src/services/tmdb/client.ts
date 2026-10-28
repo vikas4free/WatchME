@@ -11,10 +11,12 @@ export async function tmdb<T>(path: string, params: Record<string,string> = {}):
   if (!response.ok) throw new Error(response.status === 401 ? 'TMDB rejected the API key. Check your .env configuration.' : `TMDB request failed (${response.status}). Please try again.`);
   return response.json() as Promise<T>;
 }
-export async function trending() { return (await tmdb<{results:MediaItem[]}>('trending/all/week')).results.filter(x=>x.media_type!=='person'); }
-export async function popularMovies() { return (await tmdb<{results:MediaItem[]}>('movie/popular')).results.map(x=>({...x,media_type:'movie' as const})); }
-export async function popularTV() { return (await tmdb<{results:MediaItem[]}>('tv/popular')).results.map(x=>({...x,media_type:'tv' as const})); }
-export async function topRated() { return (await tmdb<{results:MediaItem[]}>('movie/top_rated')).results.map(x=>({...x,media_type:'movie' as const})); }
-export async function searchMedia(query:string) { return (await tmdb<{results:MediaItem[]}>('search/multi',{query,include_adult:'false'})).results.filter(x=>x.media_type==='movie'||x.media_type==='tv'); }
+type RawMedia = MediaItem & { name?: string; original_name?: string };
+const normalize = (x:RawMedia):MediaItem => ({...x,title:x.title||x.name||x.original_name||'Untitled',media_type:x.media_type||((x.first_air_date)?'tv':'movie')});
+export async function trending() { return (await tmdb<{results:RawMedia[]}>('trending/all/week')).results.filter(x=>x.media_type!=='person').map(normalize); }
+export async function popularMovies() { return (await tmdb<{results:RawMedia[]}>('movie/popular')).results.map(x=>({...normalize(x),media_type:'movie' as const})); }
+export async function popularTV() { return (await tmdb<{results:RawMedia[]}>('tv/popular')).results.map(x=>({...normalize(x),media_type:'tv' as const})); }
+export async function topRated() { return (await tmdb<{results:RawMedia[]}>('movie/top_rated')).results.map(x=>({...normalize(x),media_type:'movie' as const})); }
+export async function searchMedia(query:string) { return (await tmdb<{results:RawMedia[]}>('search/multi',{query,include_adult:'false'})).results.filter(x=>x.media_type==='movie'||x.media_type==='tv').map(normalize); }
 export async function mediaDetails(id:number,kind:MediaKind) { return tmdb<MediaDetails>(`${kind}/${id}`,{append_to_response:'credits,videos,similar,recommendations'}); }
 export async function genres(kind:MediaKind) { return (await tmdb<{genres:{id:number;name:string}[]}>(`genre/${kind}/list`)).genres; }
