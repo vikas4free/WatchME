@@ -4,7 +4,7 @@ import { Bell, Bookmark, Check, ChevronDown, CircleHelp, Clapperboard, Compass, 
 import { configured, popularMovies, popularTV, searchMedia, topRated, trending, mediaDetails } from './services/tmdb/client';
 import { cineSrcProvider } from './services/streaming/provider';
 import { useLibrary } from './store/library';
-import type { MediaItem, MediaKind } from './types/media';
+import type { MediaItem, MediaKind, MediaDetails } from './types/media';
 import { mediaTitle, mediaYear, posterUrl } from './types/media';
 
 const demo:MediaItem[] = [
@@ -27,7 +27,7 @@ function Rail({title,items,onOpen,action}:{title:string;items:MediaItem[];onOpen
 
 export default function App(){
  const [page,setPage]=useState<Page>('Home'); const [catalog,setCatalog]=useState<MediaItem[]>(demo); const [trendingItems,setTrendingItems]=useState<MediaItem[]>(demo); const [movieItems,setMovieItems]=useState<MediaItem[]>(demo.filter(x=>kindOf(x)==='movie')); const [tvItems,setTvItems]=useState<MediaItem[]>(demo.filter(x=>kindOf(x)==='tv')); const [topItems,setTopItems]=useState<MediaItem[]>(demo.slice().sort((a,b)=>b.vote_average-a.vote_average));
- const [query,setQuery]=useState('');const [searchResults,setSearchResults]=useState<MediaItem[]>([]);const [searching,setSearching]=useState(false);const [searchError,setSearchError]=useState('');const [selected,setSelected]=useState<MediaItem|null>(null);const [detail,setDetail]=useState<MediaItem|null>(null);const [modal,setModal]=useState<'player'|'settings'|'help'|null>(null);const [menuOpen,setMenuOpen]=useState(false);const [loading,setLoading]=useState(false);const [error,setError]=useState('');
+ const [query,setQuery]=useState('');const [searchResults,setSearchResults]=useState<MediaItem[]>([]);const [searching,setSearching]=useState(false);const [searchError,setSearchError]=useState('');const [selected,setSelected]=useState<MediaItem|null>(null);const [detail,setDetail]=useState<MediaDetails|null>(null);const [modal,setModal]=useState<'player'|'settings'|'help'|null>(null);const [menuOpen,setMenuOpen]=useState(false);const [loading,setLoading]=useState(false);const [error,setError]=useState('');
  const {watchlist,favorites,progress,toggleWatchlist,toggleFavorite,clearLibrary}=useLibrary(); const navigate=useNavigate();const location=useLocation();
  useEffect(()=>{if(location.pathname==='/movies')setPage('Movies');else if(location.pathname==='/series')setPage('Series');else if(location.pathname==='/library')setPage('My Library');else if(location.pathname==='/favorites')setPage('Favorites');else setPage('Home');},[location.pathname]);
  useEffect(()=>{let live=true;if(!configured)return;setLoading(true);Promise.allSettled([trending(),popularMovies(),popularTV(),topRated()]).then(results=>{if(!live)return;const setters=[setTrendingItems,setMovieItems,setTvItems,setTopItems];results.forEach((r,i)=>{if(r.status==='fulfilled'&&r.value.length)setters[i](r.value)});const all=results.flatMap(r=>r.status==='fulfilled'?r.value:[]);if(all.length)setCatalog(Array.from(new Map(all.map(m=>[m.id,m])).values()));if(results.every(r=>r.status==='rejected'))setError('TMDB could not be reached. Showing the included sample catalogue.');}).finally(()=>{if(live)setLoading(false)});return()=>{live=false}},[]);
