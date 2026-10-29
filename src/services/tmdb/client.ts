@@ -4,7 +4,7 @@ const KEY = import.meta.env.VITE_TMDB_API_KEY;
 export const configured = Boolean(KEY);
 export async function tmdb<T>(path: string, params: Record<string,string> = {}): Promise<T> {
   if (!KEY) throw new Error('Add VITE_TMDB_API_KEY to your .env file to load live TMDB catalogue data.');
-  const url = new URL(`${BASE.replace(/\\/$/,'')}/${path.replace(/^\\//,'')}`);
+  const url = new URL(`${BASE.replace(/\/$/,'')}/${path.replace(/^\//,'')}`);
   url.searchParams.set('api_key', KEY);
   Object.entries(params).forEach(([k,v])=>url.searchParams.set(k,v));
   const response = await fetch(url.toString());
