@@ -183,3 +183,36 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
  .add-title-panel,.account-panel{padding:20px}
 }
 @media(prefers-reduced-motion:reduce){html:focus-within{scroll-behavior:auto}}
+
+
+/* TV episode browser — selectable still cards, shown only for episodic TV */
+.tv-episode-browser{margin:0 0 13px;padding:17px 17px 13px;border:1px solid #d2d2d7;border-radius:16px;background:#f5f5f7;color:#1d1d1f}
+.tv-browser-heading{display:flex;align-items:end;justify-content:space-between;gap:12px;margin-bottom:13px}
+.tv-browser-heading>div{display:grid;gap:4px}
+.tv-browser-kicker{font-size:9px;letter-spacing:1.5px;font-weight:700;color:#6e6e73}
+.tv-browser-heading h3{margin:0;font-size:21px;line-height:1.15;letter-spacing:-.6px;font-weight:650;color:#1d1d1f}
+.tv-episode-count{font-size:11px;color:#6e6e73}
+.tv-season-tabs{display:flex;gap:7px;overflow-x:auto;padding:1px 1px 12px;scrollbar-width:thin;scrollbar-color:#c7c7cc transparent}
+.tv-season-tabs button{flex:0 0 auto;padding:8px 13px;border:1px solid #d2d2d7;border-radius:20px;background:#fff;color:#424245;font-size:11px;font-weight:600;white-space:nowrap}
+.tv-season-tabs button:hover{border-color:#0071e3;color:#0071e3}
+.tv-season-tabs button.active{background:#1d1d1f;border-color:#1d1d1f;color:#fff}
+.tv-episode-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;max-height:390px;overflow-y:auto;padding:1px 2px 8px 1px;scrollbar-width:thin;scrollbar-color:#c7c7cc transparent}
+.tv-episode-card{min-width:0;display:flex;flex-direction:column;gap:6px;padding:6px;text-align:left;border:1px solid #d2d2d7;border-radius:11px;background:#fff;color:#1d1d1f;transition:border-color .18s,box-shadow .18s,transform .18s}
+.tv-episode-card:hover{border-color:#8c8c91;transform:translateY(-1px)}
+.tv-episode-card.active{border:2px solid #0071e3;padding:5px;box-shadow:0 0 0 2px #0071e31a}
+.tv-episode-still{position:relative;aspect-ratio:16/9;overflow:hidden;border-radius:7px;background:#e5e5e7}
+.tv-episode-still img{display:block;width:100%;height:100%;object-fit:cover}
+.tv-still-fallback{height:100%;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:4px;color:#6e6e73;font-size:10px}
+.tv-episode-play{position:absolute;inset:0;display:grid;place-items:center;background:#0006;color:#fff;opacity:0;transition:opacity .18s}
+.tv-episode-card:hover .tv-episode-play,.tv-episode-card.active .tv-episode-play{opacity:1}
+.tv-episode-card>strong{display:block;font-size:11px;line-height:1.35;font-weight:650;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tv-episode-card>small{font-size:10px;color:#6e6e73}
+.tv-now-playing{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:10px 2px 0;margin-top:7px;border-top:1px solid #d2d2d7}
+.tv-now-playing>span{font-size:8px;letter-spacing:1px;font-weight:700;color:#0071e3}
+.tv-now-playing>strong{font-size:11px;color:#1d1d1f}
+.tv-now-playing>small{margin-left:auto;font-size:9px;color:#6e6e73}
+.tv-episode-empty{padding:18px 8px;color:#6e6e73;font-size:12px;line-height:1.5}
+.watch-player-modal .tv-episode-browser{max-height:48vh;overflow:hidden;display:flex;flex-direction:column}
+.watch-player-modal .tv-episode-grid{min-height:0}
+@media(max-width:900px){.tv-episode-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:600px){.tv-episode-browser{padding:12px;border-radius:12px}.tv-episode-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;max-height:38vh}.tv-episode-card>strong{font-size:10px}.tv-now-playing>small{width:100%;margin-left:0}.watch-player-modal .tv-episode-browser{max-height:45vh}}
