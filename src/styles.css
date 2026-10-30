@@ -359,3 +359,11 @@ html,body,#root{min-height:100%;background:#fff;color:#1d1d1f}
  .hero-copy{color:#515156}
  .hero-index{color:#6e6e73}
 }
+
+
+.tv-manual-selectors{display:grid;grid-template-columns:repeat(2,minmax(120px,180px)) minmax(180px,1fr);align-items:end;gap:10px;padding:2px 1px 14px}
+.tv-manual-selectors label{display:grid;gap:6px;color:#6e6e73;font-size:9px;font-weight:700;letter-spacing:1px}
+.tv-manual-selectors select{height:38px;width:100%;padding:0 10px;border:1px solid #d2d2d7;border-radius:8px;background:#fff;color:#1d1d1f;font:600 12px inherit;font-family:inherit}
+.tv-manual-selectors select:focus{outline:2px solid #0071e3;outline-offset:2px}
+.tv-manual-selectors>span{padding:0 4px 8px;color:#6e6e73;font-size:10px;line-height:1.5}
+@media(max-width:600px){.tv-manual-selectors{grid-template-columns:1fr 1fr;gap:8px}.tv-manual-selectors>span{grid-column:1/-1;padding:2px}}
