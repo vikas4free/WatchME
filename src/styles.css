@@ -17,3 +17,17 @@
 .cinesrc-frame-wrap iframe{width:100%;height:100%;border:0;display:block}
 .player-disclaimer{margin:12px 2px 2px;line-height:1.5}
 @media(max-width:700px){.watch-player-modal{width:100vw;max-height:100dvh;border-radius:0;padding:10px}.cinesrc-frame-wrap{aspect-ratio:16/9}.episode-controls{flex-wrap:wrap}}
+
+
+/* Catalogue filters and pagination */
+.catalogue-filters{display:flex;align-items:flex-end;gap:13px;flex-wrap:wrap;margin:0 0 22px;padding:14px;border:1px solid #ffffff12;border-radius:12px;background:#ffffff04}
+.catalogue-filters label{display:grid;gap:7px;color:#858b9b;font-size:9px;font-weight:700;letter-spacing:.5px;text-transform:uppercase}
+.catalogue-filters select{min-width:155px;min-height:38px;padding:0 32px 0 11px;border:1px solid #ffffff18;border-radius:8px;background:#1b1e27;color:#e7e5ee;font:11px 'Geist',sans-serif;outline:none}
+.catalogue-filters select:focus{border-color:#a48aff88}
+.catalogue-filters select:disabled{opacity:.55;cursor:not-allowed}
+.catalogue-count{margin:0 0 10px auto;color:#727989;font-size:10px}
+.load-more-wrap{display:flex;align-items:center;justify-content:center;gap:13px;padding:30px 0 12px}
+.load-more-wrap .glass-btn{min-width:165px}
+.load-more-wrap .glass-btn:disabled{opacity:.55;cursor:wait}
+.load-more-wrap>span{color:#777e8d;font-size:10px}
+@media(max-width:600px){.catalogue-filters{align-items:stretch;gap:10px;padding:11px}.catalogue-filters label{flex:1;min-width:calc(50% - 6px)}.catalogue-filters select{width:100%;min-width:0}.catalogue-count{width:100%;margin:2px 0 0}}
