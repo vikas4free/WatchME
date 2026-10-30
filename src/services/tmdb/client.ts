@@ -18,5 +18,7 @@ export async function popularMovies() { return (await tmdb<{results:RawMedia[]}>
 export async function popularTV() { return (await tmdb<{results:RawMedia[]}>('tv/popular')).results.map(x=>({...normalize(x),media_type:'tv' as const})); }
 export async function topRated() { return (await tmdb<{results:RawMedia[]}>('movie/top_rated')).results.map(x=>({...normalize(x),media_type:'movie' as const})); }
 export async function searchMedia(query:string) { return (await tmdb<{results:RawMedia[]}>('search/multi',{query,include_adult:'false'})).results.filter(x=>x.media_type==='movie'||x.media_type==='tv').map(normalize); }
+export async function discoverMedia(kind:MediaKind,page:number,sortBy:string,genreId:string) { const params:Record<string,string>={page:String(page),sort_by:sortBy,include_adult:'false'}; if(genreId)params.with_genres=genreId; return (await tmdb<{results:RawMedia[];total_pages:number}>('discover/'+kind,params)); }
+export async function genreList(kind:MediaKind) { return (await tmdb<{genres:{id:number;name:string}[]}>(`genre/${kind}/list`)).genres; }
 export async function mediaDetails(id:number,kind:MediaKind) { return tmdb<MediaDetails>(`${kind}/${id}`,{append_to_response:'credits,videos,similar,recommendations'}); }
 export async function genres(kind:MediaKind) { return (await tmdb<{genres:{id:number;name:string}[]}>(`genre/${kind}/list`)).genres; }
