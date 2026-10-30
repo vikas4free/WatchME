@@ -24,7 +24,7 @@ export async function mediaDetails(id:number,kind:MediaKind) { return tmdb<Media
 export async function genres(kind:MediaKind) { return (await tmdb<{genres:{id:number;name:string}[]}>(`genre/${kind}/list`)).genres; }
 
 
-export interface TvEpisodeInfo { id:number; episode_number:number; name:string; overview?:string; air_date?:string; runtime?:number }
+export interface TvEpisodeInfo { id:number; episode_number:number; name:string; overview?:string; air_date?:string; runtime?:number; still_path?:string|null }
 export async function tvSeasonDetails(id:number,seasonNumber:number) {
   return tmdb<{id:number;season_number:number;name:string;episodes:TvEpisodeInfo[]}>(`tv/${id}/season/${seasonNumber}`);
 }
