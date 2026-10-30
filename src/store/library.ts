@@ -13,7 +13,8 @@ interface LibraryState {
   userId:string|null;
   setUserId:(userId:string|null)=>void;
   loadCloudLibrary:(userId:string)=>Promise<void>;
-  toggleWatchlist:(item:MediaItem)=>void;\n  updateItem:(item:MediaItem)=>void;
+  toggleWatchlist:(item:MediaItem)=>void;
+  updateItem:(item:MediaItem)=>void;
   toggleFavorite:(id:number,item?:MediaItem)=>void;
   saveProgress:(item:MediaItem,seconds:number,duration:number)=>void;
   clearLibrary:()=>void;
@@ -55,7 +56,12 @@ export const useLibrary = create<LibraryState>()((set,get)=>({
     });
     set({userId,watchlist,favorites,progress});
   },
-  updateItem:(item)=>{\n    const current=get();\n    set(state=>({watchlist:state.watchlist.map(x=>x.id===item.id&&mediaKind(x)===mediaKind(item)?item:x),progress:state.progress[item.id]?{...state.progress,[item.id]:{...state.progress[item.id],item}}:state.progress}));\n    if(current.userId)void saveCloudRow(current.userId,item,get());\n  },\n  toggleWatchlist:(item)=>{
+  updateItem:(item)=>{
+    const current=get();
+    set(state=>({watchlist:state.watchlist.map(x=>x.id===item.id&&mediaKind(x)===mediaKind(item)?item:x),progress:state.progress[item.id]?{...state.progress,[item.id]:{...state.progress[item.id],item}}:state.progress}));
+    if(current.userId)void saveCloudRow(current.userId,item,get());
+  },
+  toggleWatchlist:(item)=>{
     const current=get();
     const exists=current.watchlist.some(x=>x.id===item.id&&mediaKind(x)===mediaKind(item));
     set(state=>({watchlist:exists?state.watchlist.filter(x=>!(x.id===item.id&&mediaKind(x)===mediaKind(item))):[item,...state.watchlist]}));
