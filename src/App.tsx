@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import type { User, FormEvent } from '@supabase/supabase-js';
+import type { User } from '@supabase/supabase-js';
+import type { FormEvent } from 'react';
 import { supabase, supabaseConfigured } from './services/supabase/client';
 import { Bell, Bookmark, Check, ChevronDown, CircleHelp, Clapperboard, Compass, Film, Heart, Home, Info, Library, LoaderCircle, Menu, Play, PlusCircle, Search, UserRound, Settings, ShieldCheck, Sparkles, Star, Tv, X } from 'lucide-react';
 import { configured, popularMovies, popularTV, searchMedia, topRated, trending, mediaDetails, discoverMedia, genreList } from './services/tmdb/client';
