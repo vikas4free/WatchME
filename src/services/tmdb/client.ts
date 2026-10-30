@@ -12,7 +12,7 @@ export async function tmdb<T>(path: string, params: Record<string,string> = {}):
   return response.json() as Promise<T>;
 }
 type RawMedia = Omit<MediaItem, 'media_type'> & { media_type?: MediaKind | 'person'; name?: string; original_name?: string };
-const normalize = (x:RawMedia):MediaItem => ({...x,title:x.title||x.name||x.original_name||'Untitled',media_type:x.media_type||((x.first_air_date)?'tv':'movie')});
+const normalize = (x:RawMedia):MediaItem => ({...x,title:x.title||x.name||x.original_name||'Untitled',media_type:x.media_type==='tv'||(!x.media_type&&x.first_air_date)?'tv':'movie'});
 export async function trending() { return (await tmdb<{results:RawMedia[]}>('trending/all/week')).results.filter(x=>x.media_type!=='person').map(normalize); }
 export async function popularMovies() { return (await tmdb<{results:RawMedia[]}>('movie/popular')).results.map(x=>({...normalize(x),media_type:'movie' as const})); }
 export async function popularTV() { return (await tmdb<{results:RawMedia[]}>('tv/popular')).results.map(x=>({...normalize(x),media_type:'tv' as const})); }
